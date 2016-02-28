@@ -9,7 +9,7 @@
     "lint": "eslint src test",
     "test": "mocha --compilers js:babel-register --recursive",
     "test:watch": "npm test -- --watch",
-    "test:cov": "babel-node node_modules/isparta/bin/isparta cover --report text --report html node_modules/mocha/bin/_mocha -- --reporter dot",
+    "test:cov": "babel-node node_modules/isparta/bin/isparta cover --config .isparta.server.yml node_modules/mocha/bin/_mocha",
     "check:src": "npm run lint && npm run test"
   },
   "repository": {
