@@ -25,3 +25,5 @@ before_install:
 
 script:
   - npm run test
+  - ls  coverage/server/lcov.info | cat
+  - cat coverage/server/lcov.info | node_modules/.bin/coveralls || echo "Coveralls upload failed"
