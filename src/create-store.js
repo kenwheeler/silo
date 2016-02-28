@@ -1,4 +1,5 @@
 /* @flow */
+/* eslint-disable max-params */
 
 import Rx from "rxjs/Rx";
 
@@ -29,13 +30,13 @@ const createStore = function createStore(mutations: Object, effects: Object, ini
       if (operation in currentMutations) {
         return currentMutations[operation].call(null, state, payload);
       } else {
-        throw new Error(`Operation "${operation}" not found in declared mutations or effects.`)
+        throw new Error(`Operation "${operation}" not found in declared mutations or effects.`);
       }
     },
     currentState || {}
   ).share();
 
-  const subscribe = ::stream.subscribe;
+  const subscribe = stream.subscribe.bind(stream);
 
   subscribe((s: Object) => {
     currentState = s;

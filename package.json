@@ -10,7 +10,7 @@
     "test": "mocha --compilers js:babel-register --recursive",
     "test:watch": "npm test -- --watch",
     "test:cov": "babel-node node_modules/isparta/bin/isparta cover --config .isparta.server.yml node_modules/mocha/bin/_mocha",
-    "check:src": "npm run lint && npm run test"
+    "check-ci": "npm run lint && npm run test:cov"
   },
   "repository": {
     "type": "git",

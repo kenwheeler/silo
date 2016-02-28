@@ -24,6 +24,6 @@ before_install:
   - 'if [ "$NPM_3" = true ]; then npm install -g npm@3; else true; fi'
 
 script:
-  - npm run test
+  - npm run check-ci
   - ls  coverage/server/lcov.info | cat
   - cat coverage/server/lcov.info | node_modules/.bin/coveralls || echo "Coveralls upload failed"
