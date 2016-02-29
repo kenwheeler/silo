@@ -3,8 +3,8 @@ import { createStore } from "../src/index";
 import mutations from "./helpers/mutations";
 import effects from "./helpers/effects";
 import enhancer from "./helpers/enhancer";
-import nextMutations from './helpers/nextMutations'
-import nextEffects from './helpers/nextEffects'
+import nextMutations from "./helpers/next-mutations";
+import nextEffects from "./helpers/next-effects";
 
 describe("createStore", () => {
 
@@ -74,16 +74,16 @@ describe("createStore", () => {
   it("replaces mutations", () => {
     const store = createStore(mutations, effects, { test: true });
     store.replaceMutations(nextMutations);
-    store.dispatch("addPost", { name: 'first post'})
-    const state = store.getState()
-    expect(state).toEqual({ posts: [{ name: 'first post'}] });
+    store.dispatch("ADD_POST", { name: "First post"});
+    const state = store.getState();
+    expect(state).toEqual({ posts: [{ name: "First post"}] });
   });
 
   it("replaces effects", () => {
     const store = createStore(mutations, effects, { test: true });
     store.replaceEffects(nextEffects);
-    store.dispatch("getTodos", { name: "Effect" })
-    .then(() => {
+    store.dispatch("GET_TODOS", { name: "Effect" })
+    .then((done) => {
       const state = store.getState();
       expect(state.todos[0]).toEqual({ name: "Effect" });
       done();
