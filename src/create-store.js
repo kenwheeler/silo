@@ -25,6 +25,11 @@ const createStore = function createStore(mutations: Object, effects: Object, ini
       : subject.next({ operation, payload });
   };
 
+  const actions = Proxy.create({
+    get: (proxy, name) => value => dispatch(name, value)
+  });
+
+
   const stream = subject.scan(
     (state, { operation, payload }) => {
       if (operation in currentMutations) {
@@ -60,6 +65,7 @@ const createStore = function createStore(mutations: Object, effects: Object, ini
 
   return {
     dispatch,
+    actions,
     getState,
     replaceEffects,
     replaceMutations,
