@@ -2,6 +2,9 @@ import expect from "expect";
 import { createStore } from "../src/index";
 import mutations from "./helpers/mutations";
 import effects from "./helpers/effects";
+import enhancer from "./helpers/enhancer";
+import nextMutations from './helpers/nextMutations'
+import nextEffects from './helpers/nextEffects'
 
 describe("createStore", () => {
 
@@ -60,6 +63,31 @@ describe("createStore", () => {
     });
     store.dispatch("addTodo", { name: "Test" });
     expect(todos).toEqual([{ name: "Test" }]);
+  });
+
+  it("changes state from enhancer", () => {
+    const store = createStore(mutations, effects, { test: true }, enhancer);
+    const state = store.getState();
+    expect(state).toEqual({ newState: true, todos: [] });
+  });
+
+  it("replaces mutations", () => {
+    const store = createStore(mutations, effects, { test: true });
+    store.replaceMutations(nextMutations);
+    store.dispatch("addPost", { name: 'first post'})
+    const state = store.getState()
+    expect(state).toEqual({ posts: [{ name: 'first post'}] });
+  });
+
+  it("replaces effects", () => {
+    const store = createStore(mutations, effects, { test: true });
+    store.replaceEffects(nextEffects);
+    store.dispatch("getTodos", { name: "Effect" })
+    .then(() => {
+      const state = store.getState();
+      expect(state.todos[0]).toEqual({ name: "Effect" });
+      done();
+    });
   });
 
 });
