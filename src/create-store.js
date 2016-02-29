@@ -33,11 +33,15 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
     ...initialState
   };
 
-  const dispatch = function dispatch(operation: string, payload: any): any {
+  const commit = function commit(operation: string, payload: any): any {
     return operation in currentEffects
-      ? currentEffects[operation].call(null, dispatch, payload)
+      ? currentEffects[operation].call(null, commit, payload)
       : subject.next({ operation, payload });
   };
+
+  const invoke = Proxy.create({
+    get: (proxy, name: string) => (payload: any) => commit(name, payload)
+  });
 
   const stream = subject.scan(
     (state, { operation, payload }) => {
@@ -73,7 +77,8 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
   };
 
   return {
-    dispatch,
+    commit,
+    invoke,
     getState,
     replaceEffects,
     replaceMutations,
