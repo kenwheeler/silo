@@ -53,7 +53,7 @@ describe("createStore", () => {
       });
   });
 
-  it("dispatchs actions via proxy", (done) => {
+  it("invoke mutations via proxy", (done) => {
     const store = createStore(mutations, effects);
     store.invoke.getTodo({ name: "Effect" })
       .then(() => {
