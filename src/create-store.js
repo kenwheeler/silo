@@ -3,7 +3,21 @@
 
 import Rx from "rxjs/Rx";
 
-const createStore = function createStore(mutations: Object, effects: Object, initialState: any, enhancer: Function): Object {
+/**
+ * Creates a silo store
+ *
+ * @param {Object} mutations An object that contains mutation functions and an
+ * inital state.
+ *
+ * @param {Object} effects An object that contains effect functions.
+ *
+ * @param {Object} initialState The initial state.
+ *
+ * @param {Function} enhancer The store enhancer.
+ *
+ * @returns {Store} A silo store
+ */
+const createStore = function (mutations: Object, effects: Object, initialState: any, enhancer: Function): Object {
 
   if (typeof enhancer !== "undefined") {
     return enhancer(createStore)(mutations, effects, initialState);

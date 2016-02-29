@@ -1,11 +1,9 @@
 const mutations = {
   initialState: {
-    todos: []
+    posts: []
   },
-  ADD_TODO: (state, payload) => ({
-    ...state,
-    todos: [
-      ...state.todos,
+  ADD_POST: (state, payload) => ({
+    posts: [
       payload
     ]
   })
