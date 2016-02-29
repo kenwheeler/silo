@@ -26,7 +26,7 @@ const createStore = function createStore(mutations: Object, effects: Object, ini
   };
 
   const invoke = Proxy.create({
-    get: (proxy, name) => value => dispatch(name, value)
+    get: (proxy, name: string) => (payload: any) => dispatch(name, payload)
   });
 
   const stream = subject.scan(
