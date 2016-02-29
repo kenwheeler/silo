@@ -4,4 +4,4 @@ reporting:
   reports:
     - lcov
     - json
-    - text-summary
+    - text

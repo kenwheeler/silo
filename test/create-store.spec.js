@@ -76,7 +76,11 @@ describe("createStore", () => {
     store.replaceMutations(nextMutations);
     store.dispatch("ADD_POST", { name: "First post"});
     const state = store.getState();
-    expect(state).toEqual({ posts: [{ name: "First post"}] });
+    expect(state).toEqual({
+      posts: [{ name: "First post"}],
+      todos: [],
+      test: true
+    });
   });
 
   it("replaces effects", () => {

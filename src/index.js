@@ -1,5 +1,11 @@
+import applyMiddleware from "./apply-middleware";
+import compose from "./compose";
 import createStore from "./create-store";
+import mergeMutations from "./merge-mutations";
 
 export {
-  createStore
+  applyMiddleware,
+  compose,
+  createStore,
+  mergeMutations
 };

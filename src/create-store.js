@@ -43,6 +43,8 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
     (state, { operation, payload }) => {
       if (operation in currentMutations) {
         return currentMutations[operation].call(null, state, payload);
+      } else if (operation === "internal/BOOTSTRAP") {
+        return payload;
       } else {
         throw new Error(`Operation "${operation}" not found in declared mutations or effects.`);
       }
@@ -66,6 +68,7 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
       ...currentMutations.initialState,
       ...currentState
     };
+    dispatch("internal/BOOTSTRAP", currentState);
   };
 
   const replaceEffects = function replaceEffects(nextEffects: Object) {
