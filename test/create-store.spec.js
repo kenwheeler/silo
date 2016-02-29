@@ -30,7 +30,7 @@ describe("createStore", () => {
 
   it("responds to mutation dispatches", () => {
     const store = createStore(mutations, effects);
-    store.dispatch("addTodo", { name: "Mutation" });
+    store.dispatch("ADD_TODO", { name: "Mutation" });
     const state = store.getState();
     expect(state.todos[0]).toEqual({ name: "Mutation" });
   });
@@ -38,13 +38,13 @@ describe("createStore", () => {
   it("throws if an invalid operation is supplied", () => {
     const store = createStore(mutations, effects);
     expect(() => {
-      store.dispatch("doesntExist", { name: "Mutation" });
+      store.dispatch("NOT_FOUND", { name: "Mutation" });
     }).toThrow();
   });
 
   it("responds to effect dispatches", (done) => {
     const store = createStore(mutations, effects);
-    store.dispatch("getTodo", { name: "Effect" })
+    store.dispatch("GET_TODO", { name: "Effect" })
       .then(() => {
         const state = store.getState();
         expect(state.todos[0]).toEqual({ name: "Effect" });
@@ -58,7 +58,7 @@ describe("createStore", () => {
     store.subscribe((state) => {
       todos = state.todos;
     });
-    store.dispatch("addTodo", { name: "Test" });
+    store.dispatch("ADD_TODO", { name: "Test" });
     expect(todos).toEqual([{ name: "Test" }]);
   });
 

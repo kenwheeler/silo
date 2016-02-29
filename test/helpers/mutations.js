@@ -2,7 +2,7 @@ const mutations = {
   initialState: {
     todos: []
   },
-  addTodo: (state, payload) => ({
+  ADD_TODO: (state, payload) => ({
     ...state,
     todos: [
       ...state.todos,

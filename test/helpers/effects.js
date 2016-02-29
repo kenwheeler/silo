@@ -1,16 +1,16 @@
-/* eslint-disable generator-star-spacing, no-console */
+/* eslint-disable no-console */
 
 import "babel-polyfill";
 
 const effects = {
-  getTodo: async function getTodo(dispatch, payload) {
+  GET_TODO: async function (dispatch, payload) {
     try {
       const todo = await new Promise((resolve) => {
         resolve({
           name: payload.name
         });
       });
-      dispatch("addTodo", todo);
+      dispatch("ADD_TODO", todo);
     } catch (e) {
       console.error(e);
     }
