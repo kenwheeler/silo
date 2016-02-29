@@ -1,4 +1,4 @@
-/* eslint-disable generator-star-spacing, no-console */
+/* eslint-disable generator-star-spacing, no-console, object-shorthand */
 
 import "babel-polyfill";
 
