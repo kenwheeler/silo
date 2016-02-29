@@ -25,7 +25,7 @@ const createStore = function createStore(mutations: Object, effects: Object, ini
       : subject.next({ operation, payload });
   };
 
-  const actions = Proxy.create({
+  const invoke = Proxy.create({
     get: (proxy, name) => value => dispatch(name, value)
   });
 
@@ -65,7 +65,7 @@ const createStore = function createStore(mutations: Object, effects: Object, ini
 
   return {
     dispatch,
-    actions,
+    invoke,
     getState,
     replaceEffects,
     replaceMutations,

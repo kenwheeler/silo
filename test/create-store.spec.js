@@ -20,7 +20,7 @@ describe("createStore", () => {
     expect(methods).toContain("replaceEffects");
     expect(methods).toContain("stream");
     expect(methods).toContain("subscribe");
-    expect(methods).toContain("actions");
+    expect(methods).toContain("invoke");
   });
 
   it("sets an initialState when provided", () => {
@@ -55,7 +55,7 @@ describe("createStore", () => {
 
   it("dispatchs actions via proxy", (done) => {
     const store = createStore(mutations, effects);
-    store.actions.getTodo({ name: "Effect" })
+    store.invoke.getTodo({ name: "Effect" })
       .then(() => {
         const state = store.getState();
         expect(state.todos[0]).toEqual({ name: "Effect" });
