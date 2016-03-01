@@ -43,6 +43,7 @@
     "babel-register": "^6.3.13",
     "coveralls": "^2.11.8",
     "cross-env": "^1.0.7",
+    "enzyme": "^2.0.0",
     "eslint": "^1.8.0",
     "eslint-config-defaults": "^7.1.1",
     "eslint-plugin-filenames": "^0.1.2",
@@ -50,6 +51,9 @@
     "expect": "^1.8.0",
     "isparta": "^4.0.0",
     "mocha": "^2.2.5",
+    "react": "^0.14.7",
+    "react-addons-test-utils": "^0.14.7",
+    "react-dom": "^0.14.7",
     "rimraf": "^2.4.4",
     "webpack": "^1.12.8"
   }
