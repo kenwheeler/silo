@@ -16,13 +16,15 @@ describe("createStore", () => {
     const store = createStore(mutations, effects);
     const methods = Object.keys(store);
 
-    expect(methods.length).toBe(6);
+    expect(methods.length).toBe(7);
     expect(methods).toContain("dispatch");
     expect(methods).toContain("getState");
     expect(methods).toContain("replaceMutations");
     expect(methods).toContain("replaceEffects");
     expect(methods).toContain("stream");
     expect(methods).toContain("subscribe");
+    expect(methods).toContain("actions");
+
   });
 
   it("sets an initialState when provided", () => {
@@ -34,6 +36,13 @@ describe("createStore", () => {
   it("responds to mutation dispatches", () => {
     const store = createStore(mutations, effects);
     store.dispatch("ADD_TODO", { name: "Mutation" });
+    const state = store.getState();
+    expect(state.todos[0]).toEqual({ name: "Mutation" });
+  });
+
+  it("responds to action dispatch", () => {
+    const store = createStore(mutations, effects);
+    store.actions.ADD_TODO({ name: "Mutation" });
     const state = store.getState();
     expect(state.todos[0]).toEqual({ name: "Mutation" });
   });
