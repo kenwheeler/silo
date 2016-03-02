@@ -83,7 +83,7 @@ describe("createStore", () => {
   it("replaces mutations", () => {
     const store = createStore(mutations, effects, { test: true });
     store.replaceMutations(nextMutations);
-    store.dispatch("addPost", { name: "First post"});
+    store.actions.addPost({ name: "First post"});
     const state = store.getState();
     expect(state).toEqual({
       posts: [{ name: "First post"}],
@@ -95,7 +95,7 @@ describe("createStore", () => {
   it("replaces effects", () => {
     const store = createStore(mutations, effects, { test: true });
     store.replaceEffects(nextEffects);
-    store.dispatch("getTodos", { name: "Effect" })
+    store.actions.getTodos({ name: "Effect" })
     .then((done) => {
       const state = store.getState();
       expect(state.todos[0]).toEqual({ name: "Effect" });

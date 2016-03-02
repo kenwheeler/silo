@@ -27,7 +27,6 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
 
   let currentMutations = mutations;
   let currentEffects = effects;
-
   let currentState = {
     ...mutations.initialState,
     ...initialState
@@ -39,7 +38,7 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
       : subject.next({ operation, payload });
   };
 
-  const actions = bindActions(currentEffects, currentMutations, dispatch);
+  let actions = bindActions(currentEffects, currentMutations, dispatch);
 
   const stream = subject.scan(
     (state, { operation, payload }) => {
@@ -66,15 +65,19 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
 
   const replaceMutations = function replaceMutations(nextMutations: Object) {
     currentMutations = nextMutations;
+    actions = bindActions(currentEffects, currentMutations, dispatch);
+
     currentState = {
       ...currentMutations.initialState,
       ...currentState
     };
+
     dispatch("internal/BOOTSTRAP", currentState);
   };
 
   const replaceEffects = function replaceEffects(nextEffects: Object) {
     currentEffects = nextEffects;
+    actions = bindActions(currentEffects, currentMutations, dispatch);
   };
 
   return {
