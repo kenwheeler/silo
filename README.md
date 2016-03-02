@@ -1,7 +1,7 @@
 [![Travis Status][trav_img]][trav_site]
 [![Coverage Status][cov_img]][cov_site]
 
-#silo
+#flashbang
 > Don't worry about this yet
 
 [trav_img]: https://api.travis-ci.org/kenwheeler/silo.svg

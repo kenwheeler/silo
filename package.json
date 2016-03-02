@@ -1,5 +1,5 @@
 {
-  "name": "@thekenwheeler/silo",
+  "name": "flashbang",
   "version": "0.0.1",
   "description": "RxJs based data management",
   "main": "lib/index.js",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/kenwheeler/silo.git"
+    "url": "git+ssh://git@github.com/1alpha/flashbang.git"
   },
   "keywords": [
     "rx",
@@ -25,9 +25,9 @@
   "author": "Ken Wheeler",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kenwheeler/silo/issues"
+    "url": "https://github.com/1alpha/flashbang/issues"
   },
-  "homepage": "https://github.com/kenwheeler/silo#readme",
+  "homepage": "https://github.com/1alpha/flashbang#readme",
   "dependencies": {
     "rxjs": "^5.0.0-beta.2"
   },
