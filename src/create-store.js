@@ -41,15 +41,14 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
 
   let actions = {};
 
-  if(typeof Proxy == 'undefined') {
-    for (let operation in currentEffects) {
-      actions[operation] = payload => dispatch(operation, payload)
+  if (typeof Proxy === "undefined") {
+    for (const operation in currentEffects) {
+      actions[operation] = (payload) => dispatch(operation, payload);
     }
-    for (let operation in currentMutations) {
-      actions[operation] = payload => dispatch(operation, payload)
+    for (const operation in currentMutations) {
+      actions[operation] = (payload) => dispatch(operation, payload);
     }
-  }
-  else {
+  } else {
     actions = Proxy.create({
       get: (proxy, name: string) => (payload: any) => dispatch(name, payload)
     });
