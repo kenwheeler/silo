@@ -2,7 +2,7 @@
 /* eslint-disable max-params */
 
 import Rx from "rxjs/Rx";
-
+import bindActions from "./bind-actions";
 /**
  * Creates a silo store
  *
@@ -39,20 +39,7 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
       : subject.next({ operation, payload });
   };
 
-  let actions = {};
-
-  if (typeof Proxy === "undefined") {
-    for (const operation in currentEffects) {
-      actions[operation] = (payload) => dispatch(operation, payload);
-    }
-    for (const operation in currentMutations) {
-      actions[operation] = (payload) => dispatch(operation, payload);
-    }
-  } else {
-    actions = Proxy.create({
-      get: (proxy, name: string) => (payload: any) => dispatch(name, payload)
-    });
-  }
+  const actions = bindActions(currentEffects, currentMutations, dispatch);
 
   const stream = subject.scan(
     (state, { operation, payload }) => {
