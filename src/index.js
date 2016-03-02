@@ -1,11 +1,4 @@
-import applyMiddleware from "./apply-middleware";
-import compose from "./compose";
-import createStore from "./create-store";
-import mergeMutations from "./merge-mutations";
-
-export {
-  applyMiddleware,
-  compose,
-  createStore,
-  mergeMutations
-};
+export { default as applyMiddleware } from "./apply-middleware";
+export { default as compose } from "./compose";
+export { default as createStore } from "./create-store";
+export { default as mergeMutations } from "./merge-mutations";
