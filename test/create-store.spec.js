@@ -16,9 +16,8 @@ describe("createStore", () => {
     const store = createStore(mutations, effects);
     const methods = Object.keys(store);
 
-    expect(methods.length).toBe(6);
+    expect(methods.length).toBe(5);
     expect(methods).toContain("dispatch");
-    expect(methods).toContain("getState");
     expect(methods).toContain("replaceMutations");
     expect(methods).toContain("replaceEffects");
     expect(methods).toContain("stream");
@@ -27,14 +26,14 @@ describe("createStore", () => {
 
   it("sets an initialState when provided", () => {
     const store = createStore(mutations, effects, { test: true });
-    const state = store.getState();
+    const state = store.state;
     expect(state).toEqual({ test: true, todos: [] });
   });
 
   it("responds to mutation dispatches", () => {
     const store = createStore(mutations, effects);
     store.dispatch("ADD_TODO", { name: "Mutation" });
-    const state = store.getState();
+    const state = store.state;
     expect(state.todos[0]).toEqual({ name: "Mutation" });
   });
 
@@ -49,7 +48,7 @@ describe("createStore", () => {
     const store = createStore(mutations, effects);
     store.dispatch("GET_TODO", { name: "Effect" })
       .then(() => {
-        const state = store.getState();
+        const state = store.state;
         expect(state.todos[0]).toEqual({ name: "Effect" });
         done();
       });
@@ -67,7 +66,7 @@ describe("createStore", () => {
 
   it("changes state from enhancer", () => {
     const store = createStore(mutations, effects, { test: true }, enhancer);
-    const state = store.getState();
+    const state = store.state;
     expect(state).toEqual({ newState: true, todos: [] });
   });
 
@@ -75,7 +74,7 @@ describe("createStore", () => {
     const store = createStore(mutations, effects, { test: true });
     store.replaceMutations(nextMutations);
     store.dispatch("ADD_POST", { name: "First post"});
-    const state = store.getState();
+    const state = store.state;
     expect(state).toEqual({
       posts: [{ name: "First post"}],
       todos: [],
@@ -88,7 +87,7 @@ describe("createStore", () => {
     store.replaceEffects(nextEffects);
     store.dispatch("GET_TODOS", { name: "Effect" })
     .then((done) => {
-      const state = store.getState();
+      const state = store.state;
       expect(state.todos[0]).toEqual({ name: "Effect" });
       done();
     });

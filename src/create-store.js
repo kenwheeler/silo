@@ -75,15 +75,21 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
     currentEffects = nextEffects;
   };
 
-  return {
+  const store = {
     dispatch,
-    getState,
     replaceEffects,
     replaceMutations,
     stream,
     subscribe
   };
 
+  Object.defineProperty(store, 'state', {
+    get: () => getState()
+  });
+
+  return store
+
 };
+
 
 export default createStore;
