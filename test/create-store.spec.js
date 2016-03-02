@@ -16,13 +16,15 @@ describe("createStore", () => {
     const store = createStore(mutations, effects);
     const methods = Object.keys(store);
 
-    expect(methods.length).toBe(6);
+    expect(methods.length).toBe(7);
     expect(methods).toContain("dispatch");
     expect(methods).toContain("getState");
     expect(methods).toContain("replaceMutations");
     expect(methods).toContain("replaceEffects");
     expect(methods).toContain("stream");
     expect(methods).toContain("subscribe");
+    expect(methods).toContain("actions");
+
   });
 
   it("sets an initialState when provided", () => {
@@ -33,7 +35,14 @@ describe("createStore", () => {
 
   it("responds to mutation dispatches", () => {
     const store = createStore(mutations, effects);
-    store.dispatch("ADD_TODO", { name: "Mutation" });
+    store.dispatch("addTodo", { name: "Mutation" });
+    const state = store.getState();
+    expect(state.todos[0]).toEqual({ name: "Mutation" });
+  });
+
+  it("responds to action dispatch", () => {
+    const store = createStore(mutations, effects);
+    store.actions.addTodo({ name: "Mutation" });
     const state = store.getState();
     expect(state.todos[0]).toEqual({ name: "Mutation" });
   });
@@ -41,13 +50,13 @@ describe("createStore", () => {
   it("throws if an invalid operation is supplied", () => {
     const store = createStore(mutations, effects);
     expect(() => {
-      store.dispatch("NOT_FOUND", { name: "Mutation" });
+      store.dispatch("notFound", { name: "Mutation" });
     }).toThrow();
   });
 
   it("responds to effect dispatches", (done) => {
     const store = createStore(mutations, effects);
-    store.dispatch("GET_TODO", { name: "Effect" })
+    store.dispatch("getTodo", { name: "Effect" })
       .then(() => {
         const state = store.getState();
         expect(state.todos[0]).toEqual({ name: "Effect" });
@@ -61,7 +70,7 @@ describe("createStore", () => {
     store.subscribe((state) => {
       todos = state.todos;
     });
-    store.dispatch("ADD_TODO", { name: "Test" });
+    store.dispatch("addTodo", { name: "Test" });
     expect(todos).toEqual([{ name: "Test" }]);
   });
 
@@ -74,7 +83,7 @@ describe("createStore", () => {
   it("replaces mutations", () => {
     const store = createStore(mutations, effects, { test: true });
     store.replaceMutations(nextMutations);
-    store.dispatch("ADD_POST", { name: "First post"});
+    store.actions.addPost({ name: "First post"});
     const state = store.getState();
     expect(state).toEqual({
       posts: [{ name: "First post"}],
@@ -86,7 +95,7 @@ describe("createStore", () => {
   it("replaces effects", () => {
     const store = createStore(mutations, effects, { test: true });
     store.replaceEffects(nextEffects);
-    store.dispatch("GET_TODOS", { name: "Effect" })
+    store.actions.getTodos({ name: "Effect" })
     .then((done) => {
       const state = store.getState();
       expect(state.todos[0]).toEqual({ name: "Effect" });
