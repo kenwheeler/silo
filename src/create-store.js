@@ -83,11 +83,11 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
     subscribe
   };
 
-  Object.defineProperty(store, 'state', {
+  Object.defineProperty(store, "state", {
     get: () => getState()
   });
 
-  return store
+  return store;
 
 };
 
