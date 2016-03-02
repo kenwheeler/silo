@@ -58,10 +58,6 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
     currentState = s;
   });
 
-  const getState = function getState(): Object {
-    return currentState;
-  };
-
   const replaceMutations = function replaceMutations(nextMutations: Object) {
     currentMutations = nextMutations;
     currentState = {
@@ -84,7 +80,7 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
   };
 
   Object.defineProperty(store, "state", {
-    get: () => getState()
+    get: () => currentState
   });
 
   return store;
