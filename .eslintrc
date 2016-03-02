@@ -6,6 +6,9 @@
   "indent": [2, 2, {"SwitchCase": 1}]
   "max-len": 0
   "no-loop-func": 0
+  "curly": 0
+  "max-statements": 0
+  "max-params": 0
 
 "env":
   "browser": true,

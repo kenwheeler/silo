@@ -18,7 +18,7 @@ import bindActions from "./bind-actions";
  * @returns {Store} A silo store
  */
 
-const canProxy = typeof Proxy !== "undefined"
+const canProxy = typeof Proxy !== "undefined";
 
 const createStore = function (mutations: Object, effects: Object, initialState: any, enhancer: Function): Object {
 
@@ -49,7 +49,7 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
   } else {
     bindActions(currentEffects, currentMutations, dispatch, actions);
   }
-  
+
   const stream = subject.scan(
     (state, { operation, payload }) => {
       if (operation in currentMutations) {
@@ -75,7 +75,7 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
 
   const replaceMutations = function replaceMutations(nextMutations: Object) {
     currentMutations = nextMutations;
-    if(!canProxy) bindActions(currentEffects, nextMutations, dispatch, actions);
+    if (!canProxy) bindActions(currentEffects, nextMutations, dispatch, actions);
     currentState = {
       ...currentMutations.initialState,
       ...currentState
@@ -86,7 +86,7 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
 
   const replaceEffects = function replaceEffects(nextEffects: Object) {
     currentEffects = nextEffects;
-    if(!canProxy) bindActions(nextEffects, currentMutations, dispatch, actions);
+    if (!canProxy) bindActions(nextEffects, currentMutations, dispatch, actions);
   };
 
   return {
