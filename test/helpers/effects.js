@@ -3,14 +3,14 @@
 import "babel-polyfill";
 
 const effects = {
-  GET_TODO: async function (dispatch, payload) {
+  getTodo: async function (dispatch, payload) {
     try {
       const todo = await new Promise((resolve) => {
         resolve({
           name: payload.name
         });
       });
-      dispatch("ADD_TODO", todo);
+      dispatch("addTodo", todo);
     } catch (e) {
       console.error(e);
     }

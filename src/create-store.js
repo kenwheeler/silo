@@ -2,7 +2,7 @@
 /* eslint-disable max-params */
 
 import Rx from "rxjs/Rx";
-
+import bindActions from "./bind-actions";
 /**
  * Creates a silo store
  *
@@ -17,6 +17,9 @@ import Rx from "rxjs/Rx";
  *
  * @returns {Store} A silo store
  */
+
+const canProxy = typeof Proxy !== "undefined";
+
 const createStore = function (mutations: Object, effects: Object, initialState: any, enhancer: Function): Object {
 
   if (typeof enhancer !== "undefined") {
@@ -25,9 +28,9 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
 
   const subject = new Rx.Subject();
 
+  let actions = {};
   let currentMutations = mutations;
   let currentEffects = effects;
-
   let currentState = {
     ...mutations.initialState,
     ...initialState
@@ -38,6 +41,14 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
       ? currentEffects[operation].call(null, dispatch, payload)
       : subject.next({ operation, payload });
   };
+
+  if (canProxy) {
+    actions = Proxy.create({
+      get: (proxy, name: string) => (payload: any) => dispatch(name, payload)
+    });
+  } else {
+    bindActions(currentEffects, currentMutations, dispatch, actions);
+  }
 
   const stream = subject.scan(
     (state, { operation, payload }) => {
@@ -60,19 +71,23 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
 
   const replaceMutations = function replaceMutations(nextMutations: Object) {
     currentMutations = nextMutations;
+    if (!canProxy) bindActions(currentEffects, nextMutations, dispatch, actions);
     currentState = {
       ...currentMutations.initialState,
       ...currentState
     };
+
     dispatch("internal/BOOTSTRAP", currentState);
   };
 
   const replaceEffects = function replaceEffects(nextEffects: Object) {
     currentEffects = nextEffects;
+    if (!canProxy) bindActions(nextEffects, currentMutations, dispatch, actions);
   };
 
   const store = {
     dispatch,
+    actions,
     replaceEffects,
     replaceMutations,
     stream,
