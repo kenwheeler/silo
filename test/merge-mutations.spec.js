@@ -28,8 +28,8 @@ describe("mergeMutations", () => {
       nextMutations
     );
 
-    expect(merged.ADD_TODO).toExist();
-    expect(merged.ADD_POST).toExist();
+    expect(merged.addTodo).toExist();
+    expect(merged.addPost).toExist();
   });
 
 });
