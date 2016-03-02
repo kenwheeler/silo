@@ -39,10 +39,21 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
       : subject.next({ operation, payload });
   };
 
+  let actions = {};
 
-  const actions = Proxy.create({
-    get: (proxy, name: string) => (payload: any) => dispatch(name, payload)
-  });
+  if(typeof Proxy == 'undefined') {
+    for (let operation in currentEffects) {
+      actions[operation] = payload => dispatch(operation, payload)
+    }
+    for (let operation in currentMutations) {
+      actions[operation] = payload => dispatch(operation, payload)
+    }
+  }
+  else {
+    actions = Proxy.create({
+      get: (proxy, name: string) => (payload: any) => dispatch(name, payload)
+    });
+  }
 
   const stream = subject.scan(
     (state, { operation, payload }) => {
