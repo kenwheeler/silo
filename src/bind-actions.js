@@ -1,6 +1,4 @@
-export default (currentEffects, currentMutations, dispatch) => {
-  let actions = {};
-
+export default (currentEffects, currentMutations, dispatch, actions) => {
   if (typeof Proxy === "undefined") {
     for (const operation in currentEffects) {
       actions[operation] = (payload: any) => dispatch(operation, payload);
@@ -13,6 +11,4 @@ export default (currentEffects, currentMutations, dispatch) => {
       get: (proxy, name: string) => (payload: any) => dispatch(name, payload)
     });
   }
-
-  return actions;
 };

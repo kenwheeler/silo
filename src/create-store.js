@@ -17,6 +17,9 @@ import bindActions from "./bind-actions";
  *
  * @returns {Store} A silo store
  */
+
+const canProxy = typeof Proxy !== "undefined"
+
 const createStore = function (mutations: Object, effects: Object, initialState: any, enhancer: Function): Object {
 
   if (typeof enhancer !== "undefined") {
@@ -25,6 +28,7 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
 
   const subject = new Rx.Subject();
 
+  let actions = {};
   let currentMutations = mutations;
   let currentEffects = effects;
   let currentState = {
@@ -38,8 +42,14 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
       : subject.next({ operation, payload });
   };
 
-  let actions = bindActions(currentEffects, currentMutations, dispatch);
-
+  if (canProxy) {
+    actions = Proxy.create({
+      get: (proxy, name: string) => (payload: any) => dispatch(name, payload)
+    });
+  } else {
+    bindActions(currentEffects, currentMutations, dispatch, actions);
+  }
+  
   const stream = subject.scan(
     (state, { operation, payload }) => {
       if (operation in currentMutations) {
@@ -65,8 +75,7 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
 
   const replaceMutations = function replaceMutations(nextMutations: Object) {
     currentMutations = nextMutations;
-    actions = bindActions(currentEffects, currentMutations, dispatch);
-
+    if(!canProxy) bindActions(currentEffects, nextMutations, dispatch, actions);
     currentState = {
       ...currentMutations.initialState,
       ...currentState
@@ -77,7 +86,7 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
 
   const replaceEffects = function replaceEffects(nextEffects: Object) {
     currentEffects = nextEffects;
-    actions = bindActions(currentEffects, currentMutations, dispatch);
+    if(!canProxy) bindActions(nextEffects, currentMutations, dispatch, actions);
   };
 
   return {
