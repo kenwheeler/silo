@@ -3,6 +3,7 @@
 
 import Rx from "rxjs/Rx";
 import bindActions from "./bind-actions";
+
 /**
  * Creates a silo store
  *
@@ -35,6 +36,7 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
     ...mutations.initialState,
     ...initialState
   };
+  const oldStates = [currentState];
 
   const dispatch = function dispatch(operation: string, payload: any): any {
     return operation in currentEffects
@@ -66,11 +68,17 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
   const subscribe = stream.subscribe.bind(stream);
 
   subscribe((s: Object) => {
+    oldStates.push(s);
     currentState = s;
   });
 
   const getState = function getState(): Object {
     return currentState;
+  };
+
+  const rewind = function rewind(amount :number) {
+    const index = amount ? -(1 + amount) : -2;
+    currentState = oldStates.slice(index)[0];
   };
 
   const replaceMutations = function replaceMutations(nextMutations: Object) {
@@ -92,6 +100,7 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
   return {
     dispatch,
     actions,
+    rewind,
     getState,
     replaceEffects,
     replaceMutations,

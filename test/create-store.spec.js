@@ -16,8 +16,9 @@ describe("createStore", () => {
     const store = createStore(mutations, effects);
     const methods = Object.keys(store);
 
-    expect(methods.length).toBe(7);
+    expect(methods.length).toBe(8);
     expect(methods).toContain("dispatch");
+    expect(methods).toContain("rewind");
     expect(methods).toContain("getState");
     expect(methods).toContain("replaceMutations");
     expect(methods).toContain("replaceEffects");
@@ -38,6 +39,17 @@ describe("createStore", () => {
     store.dispatch("addTodo", { name: "Mutation" });
     const state = store.getState();
     expect(state.todos[0]).toEqual({ name: "Mutation" });
+  });
+
+  it("allows you to rewind state", () => {
+    const store = createStore(mutations, effects);
+    store.dispatch("addTodo", { name: "Mutation" });
+    store.rewind();
+
+    expect(store.getState().todos).toEqual([]);
+
+    store.dispatch("addTodo", { name: "another todo" });
+    expect(store.getState().todos[0].name).toEqual("another todo");
   });
 
   it("responds to action dispatch", () => {
