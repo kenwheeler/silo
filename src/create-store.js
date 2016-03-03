@@ -27,7 +27,7 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
     return enhancer(createStore)(mutations, effects, initialState);
   }
 
-  const subject = new Rx.Subject();
+  const subject = new Rx.ReplaySubject(50);
 
   let actions = {};
   let currentMutations = mutations;
@@ -36,7 +36,6 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
     ...mutations.initialState,
     ...initialState
   };
-  const oldStates = [currentState];
 
   const dispatch = function dispatch(operation: string, payload: any): any {
     return operation in currentEffects
@@ -68,7 +67,6 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
   const subscribe = stream.subscribe.bind(stream);
 
   subscribe((s: Object) => {
-    oldStates.push(s);
     currentState = s;
   });
 
@@ -77,8 +75,7 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
   };
 
   const rewind = function rewind(amount :number) {
-    const index = amount ? -(1 + amount) : -2;
-    currentState = oldStates.slice(index)[0];
+    currentState = ""
   };
 
   const replaceMutations = function replaceMutations(nextMutations: Object) {
