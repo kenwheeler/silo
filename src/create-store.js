@@ -69,10 +69,6 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
     currentState = s;
   });
 
-  const getState = function getState(): Object {
-    return currentState;
-  };
-
   const replaceMutations = function replaceMutations(nextMutations: Object) {
     currentMutations = nextMutations;
     if (!canProxy) bindActions(currentEffects, nextMutations, dispatch, actions);
@@ -89,16 +85,22 @@ const createStore = function (mutations: Object, effects: Object, initialState: 
     if (!canProxy) bindActions(nextEffects, currentMutations, dispatch, actions);
   };
 
-  return {
+  const store = {
     dispatch,
     actions,
-    getState,
     replaceEffects,
     replaceMutations,
     stream,
     subscribe
   };
 
+  Object.defineProperty(store, "state", {
+    get: () => currentState
+  });
+
+  return store;
+
 };
+
 
 export default createStore;
